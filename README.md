@@ -6,16 +6,18 @@ A structured extraction of the full topic hierarchy from [Bohrium SciencePedia](
 
 ## Files
 
-- `index.html` / `sciencepedia_hierarchy.html` — interactive, collapsible hierarchy browser with a live search filter and a per-topic "✨ Explain" feature (see below). Same file, `index.html` is what GitHub Pages serves at the root.
+- `index.html` / `sciencepedia_hierarchy.html` — interactive, collapsible hierarchy browser with a live search filter and a per-chapter "✨ Reading list" feature (see below). Same file, `index.html` is what GitHub Pages serves at the root.
 - `sciencepedia_hierarchy.md` — the full hierarchy as a nested Markdown outline.
 - `sciencepedia_hierarchy.txt` — the full hierarchy as plain indented text.
 
-## The "✨ Explain" feature
+## The "✨ Reading list" feature
 
-Click the ✨ button next to any topic to get:
-- A **plain-language explanation** of the topic (via the Anthropic Claude API).
-- **Real, verifiable related papers** looked up live via the free [OpenAlex](https://openalex.org) scholarly API — no key required for this part.
-- **AI-suggested further reading** (via Claude) — clearly labeled as unverified; confirm titles before citing.
+Click the ✨ button next to any **chapter** (3,990 total — one level up from individual topics) to get:
+- A **detailed plain-language overview** of everything the chapter covers, referencing its actual topics (via the Anthropic Claude API).
+- **Real, verifiable related papers**, looked up live by chapter title via the free [OpenAlex](https://openalex.org) scholarly API (falling back to the course title if the chapter title has no direct match) — no key required for this part.
+- **AI-suggested further reading** — 5-8 well-known textbooks/resources per chapter (via Claude), clearly labeled as unverified; confirm titles before citing.
+
+This is scoped to chapters rather than individual topics: chapter titles read like real textbook section titles (so the paper search is much more relevant), and a chapter's worth of further reading is more useful than one per narrow topic.
 
 ### About the API key
 
