@@ -46,6 +46,10 @@ The explanation and AI-reading-list features call the Anthropic API **directly f
 
 If you don't set a key, the real-paper lookups (OpenAlex) still work — only the AI explanation/reading-list portion is skipped.
 
+## Performance: lazy topic rendering
+
+Earlier versions built all 47,143 topics' `<li>` markup into the page on load (~94,000 DOM nodes total), which was slow enough to trigger the browser's "Page Unresponsive" warning. Topic data now lives in a compact JS array (`TOPIC_DATA`) instead of inline HTML, and each chapter's topic list is only rendered into the DOM the moment that chapter is actually opened (or matched by a search) — cutting the up-front DOM to ~5,000 skeleton nodes (domains/levels/courses/categories/chapters only). Search still works instantly across all 47,143 topics because it matches against `TOPIC_DATA` directly rather than scanning the DOM, and only renders the chapters that actually match.
+
 ## Provenance
 
 Extracted via browser automation against Bohrium's internal (WAF-protected) `wiki_v2` endpoints, verified topic-by-topic against the site's own per-course counts (zero mismatches across all 238 courses). See commit history / conversation for extraction methodology.
