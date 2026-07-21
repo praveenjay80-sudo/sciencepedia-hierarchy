@@ -19,6 +19,16 @@ Click the ✨ button next to any **chapter** (3,990 total — one level up from 
 
 This is scoped to chapters rather than individual topics: chapter titles read like real textbook section titles (so the paper search is much more relevant), and a chapter's worth of further reading is more useful than one per narrow topic.
 
+Every chapter also always shows (no key, no click needed):
+- A **Scholar** link — opens a Google Scholar search for that chapter, scoped with its course and domain name for context.
+- An **OpenAlex** link — opens OpenAlex's own works search, filtered by chapter title *and* field-of-study (e.g. Physics vs. Mathematics), so a generic chapter name like "Geometry" doesn't collide across domains.
+
+Papers returned in-page from OpenAlex include their **citation count**, plus a "who cites it" link to see later work that references them.
+
+### On search relevance
+
+OpenAlex's `title.search` requires the query terms to appear in the paper's own title, and results are additionally constrained to match the chapter's domain (Physics, Chemistry, etc.) via OpenAlex's field-of-study taxonomy — this avoids the two failure modes of naive keyword search: (1) tangential full-text matches from completely unrelated fields, and (2) same-word-different-field collisions (e.g. "oscillatory motion" in biomechanics vs. classical mechanics, "geometry" in physics vs. pure math). If no in-domain title match exists, it falls back to a domain-unfiltered search, then a stripped/simplified title, then the course title, before giving up and showing "no closely matching papers."
+
 ### About the API key
 
 The explanation and AI-reading-list features call the Anthropic API **directly from your browser**, using an API key **you provide yourself** via the "⚙ API Settings" button.
