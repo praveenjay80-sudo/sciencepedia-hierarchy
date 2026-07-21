@@ -12,39 +12,28 @@ A structured extraction of the full topic hierarchy from [Bohrium SciencePedia](
 
 ## The "✨ Reading list" feature
 
-Click the ✨ button next to any **chapter** (3,990 total — one level up from individual topics) to get:
-- A **detailed plain-language overview** of everything the chapter covers, referencing its actual topics (via the Anthropic Claude API).
-- **Real, verifiable related papers**, looked up live by chapter title via the free [OpenAlex](https://openalex.org) scholarly API (falling back to the course title if the chapter title has no direct match) — no key required for this part.
-- **AI-suggested further reading** — 5-8 well-known textbooks/resources per chapter (via Claude), clearly labeled as unverified; confirm titles before citing.
+Click the ✨ Reading list button next to any **chapter** (3,990 total — one level up from individual topics) to get, entirely from the Anthropic Claude API:
+- A **detailed plain-language overview** of everything the chapter covers, grounded in its actual topic list.
+- A **reading list** of 5-8 well-known textbooks/resources, each with a note on why it's relevant, plus a "verify on Scholar" link per item so you can confirm it's real before relying on it.
 
-This is scoped to chapters rather than individual topics: chapter titles read like real textbook section titles (so the paper search is much more relevant), and a chapter's worth of further reading is more useful than one per narrow topic.
+This is scoped to chapters rather than individual topics: chapter titles read like real textbook section titles, and a chapter's worth of further reading is more useful than one per narrow topic.
 
-Every chapter also always shows (no key, no click needed):
-- A **Scholar** link — opens a Google Scholar search for that chapter, scoped with its course and domain name for context.
+**Why this is fully AI-generated rather than live-searched:** an earlier version also queried the free [OpenAlex](https://openalex.org) scholarly API live for "real, verifiable" papers on every click. That was removed - OpenAlex enforces a very small per-client daily request budget on its public API (observed `Retry-After` once exhausted: **~13 hours**), so most visitors would just see a rate-limit error instead of results most of the time. Rather than a feature that mostly fails, every chapter still always shows two static links that need no API call and never rate-limit:
+- A **Scholar** link — opens a Google Scholar search for that chapter, scoped with its course and domain for context.
 - An **OpenAlex** link — opens OpenAlex's own works search, filtered by chapter title *and* field-of-study (e.g. Physics vs. Mathematics), so a generic chapter name like "Geometry" doesn't collide across domains.
 
-Papers returned in-page from OpenAlex include their **citation count**, plus a "who cites it" link to see later work that references them.
-
-### On search relevance
-
-OpenAlex's `title.search` requires the query terms to appear in the paper's own title, and results are additionally constrained to match the chapter's domain (Physics, Chemistry, etc.) via OpenAlex's field-of-study taxonomy — this avoids the two failure modes of naive keyword search: (1) tangential full-text matches from completely unrelated fields, and (2) same-word-different-field collisions (e.g. "oscillatory motion" in biomechanics vs. classical mechanics, "geometry" in physics vs. pure math). If no in-domain title match exists, it falls back to a domain-unfiltered search, then a stripped/simplified title, then finally the *course* title — that last tier is labeled in-page ("broadened the search to...") since several sibling chapters in the same course can end up showing the same course-level papers when their own chapter title has no direct match.
-
-Every OpenAlex result always has a clickable source link (DOI, or publisher landing page, or failing both, the paper's own OpenAlex page) plus a citation count. AI-suggested reading-list items (which are not independently verified) each get a "verify on Scholar" link so you can check they're real before relying on them.
-
-### A note on OpenAlex's API budget
-
-OpenAlex enforces a small per-client daily request budget on its public API and returns an HTTP 200 with an `{error, message}` body (not a 4xx/5xx status) once it's exhausted — this repo's code explicitly detects that shape and surfaces it as a real error rather than silently showing "no papers found." If you see an OpenAlex error message in the reading-list panel, it's this budget limit, not a bug or a missing-papers situation; it resets daily. The Scholar/OpenAlex quick-links on each chapter don't call the API at all, so they keep working regardless.
+Use those to check real sources yourself; treat the AI reading list as a starting point, not a citation.
 
 ### About the API key
 
-The explanation and AI-reading-list features call the Anthropic API **directly from your browser**, using an API key **you provide yourself** via the "⚙ API Settings" button.
+The chapter-overview and reading-list feature calls the Anthropic API **directly from your browser**, using an API key **you provide yourself** via the "⚙ API Settings" button.
 
 - The key is stored **only in your browser's local storage** (`localStorage`), scoped to this page.
 - It is **never** sent to any server other than `api.anthropic.com`, and **never** written into this repository or any file.
 - Results are cached in your browser's local storage after the first lookup, so repeat views don't re-call the API.
 - Get a key at [console.anthropic.com](https://console.anthropic.com/).
 
-If you don't set a key, the real-paper lookups (OpenAlex) still work — only the AI explanation/reading-list portion is skipped.
+Without a key, the ✨ button won't produce an overview/reading list, but the Scholar/OpenAlex links on every chapter work regardless.
 
 ## Performance: lazy topic rendering
 
