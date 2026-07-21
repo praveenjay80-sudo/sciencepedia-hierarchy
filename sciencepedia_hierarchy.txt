@@ -1,6 +1,6 @@
 SciencePedia Knowledge Hierarchy
 Extracted from https://www.bohrium.com/en/sciencepedia
-Generated: 2026-07-21T09:53:04.435Z
+Generated: 2026-07-21T10:06:08.254Z
 Totals: 9 domains, 238 courses, 47143 topics
 ======================================================================
 

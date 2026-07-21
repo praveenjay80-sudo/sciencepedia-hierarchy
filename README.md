@@ -27,7 +27,13 @@ Papers returned in-page from OpenAlex include their **citation count**, plus a "
 
 ### On search relevance
 
-OpenAlex's `title.search` requires the query terms to appear in the paper's own title, and results are additionally constrained to match the chapter's domain (Physics, Chemistry, etc.) via OpenAlex's field-of-study taxonomy — this avoids the two failure modes of naive keyword search: (1) tangential full-text matches from completely unrelated fields, and (2) same-word-different-field collisions (e.g. "oscillatory motion" in biomechanics vs. classical mechanics, "geometry" in physics vs. pure math). If no in-domain title match exists, it falls back to a domain-unfiltered search, then a stripped/simplified title, then the course title, before giving up and showing "no closely matching papers."
+OpenAlex's `title.search` requires the query terms to appear in the paper's own title, and results are additionally constrained to match the chapter's domain (Physics, Chemistry, etc.) via OpenAlex's field-of-study taxonomy — this avoids the two failure modes of naive keyword search: (1) tangential full-text matches from completely unrelated fields, and (2) same-word-different-field collisions (e.g. "oscillatory motion" in biomechanics vs. classical mechanics, "geometry" in physics vs. pure math). If no in-domain title match exists, it falls back to a domain-unfiltered search, then a stripped/simplified title, then finally the *course* title — that last tier is labeled in-page ("broadened the search to...") since several sibling chapters in the same course can end up showing the same course-level papers when their own chapter title has no direct match.
+
+Every OpenAlex result always has a clickable source link (DOI, or publisher landing page, or failing both, the paper's own OpenAlex page) plus a citation count. AI-suggested reading-list items (which are not independently verified) each get a "verify on Scholar" link so you can check they're real before relying on them.
+
+### A note on OpenAlex's API budget
+
+OpenAlex enforces a small per-client daily request budget on its public API and returns an HTTP 200 with an `{error, message}` body (not a 4xx/5xx status) once it's exhausted — this repo's code explicitly detects that shape and surfaces it as a real error rather than silently showing "no papers found." If you see an OpenAlex error message in the reading-list panel, it's this budget limit, not a bug or a missing-papers situation; it resets daily. The Scholar/OpenAlex quick-links on each chapter don't call the API at all, so they keep working regardless.
 
 ### About the API key
 
